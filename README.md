@@ -1,6 +1,6 @@
 # psutil_ros
 
-ROS Wrapper for psutil. Get CPU, virtual memory and tempartures easily
+ROS Noetic Wrapper for psutil. Get CPU, virtual memory and tempartures easily
 
 ## Installation
 
@@ -23,4 +23,3 @@ rosrun psutil_ros psutil_ros_node.py
 ```
 
 * You can find psutil documentation here: http://psutil.readthedocs.io/en/latest/#
-* If you want me to expose more psutil features to ROS, open an issue
