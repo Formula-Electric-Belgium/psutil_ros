@@ -65,23 +65,23 @@ if __name__ == '__main__':
     
     while not rospy.is_shutdown():
 	
-	# messages 
-	cpu_msg = Cpu()
-	memo_msg = VirtualMemory()
-	temps_msg = Temperatures()
+	    # messages 
+        cpu_msg = Cpu()
+        memo_msg = VirtualMemory()
+        temps_msg = Temperatures()
         network_msg = Network()
 	
-	#********* CPU *********
-	cpu_msg.usage = psutil.cpu_percent(interval=0)
-	cpu_msg.physical_cores = psutil.cpu_count(logical=False)
-	cpu_msg.cores = psutil.cpu_count()
-	cpu_msg.current_freq = psutil.cpu_freq().current
-	cpu_msg.min_freq = psutil.cpu_freq().min
+	    #********* CPU *********
+        cpu_msg.usage = psutil.cpu_percent(interval=0)
+        cpu_msg.physical_cores = psutil.cpu_count(logical=False)
+        cpu_msg.cores = psutil.cpu_count()
+        cpu_msg.current_freq = psutil.cpu_freq().current
+        cpu_msg.min_freq = psutil.cpu_freq().min
         cpu_msg.max_freq = psutil.cpu_freq().max
 
 	# read cpu data only after first cycle, because we are using interval=0, and psutil'''
 	# documentation says in this case, the first read should be ignored'''
-	if not is_first and publish_cpu: 
+        if not is_first and publish_cpu: 
             cpu_pub.publish(cpu_msg)
             
         #**** Virtual Memo *****
@@ -99,13 +99,13 @@ if __name__ == '__main__':
         if publish_temps:
             temps = psutil.sensors_temperatures()
 
-            for key, value in temps.iteritems():
-		sensor_temp_msg = SensorTemp()
-  		sensor_temp_msg.label = key
-		sensor_temp_msg.current = value[0].current
-		sensor_temp_msg.high = value[0].high
-		sensor_temp_msg.critical = value[0].critical
-            	temps_msg.temps.append(sensor_temp_msg)
+            for key, value in temps.items():
+                sensor_temp_msg = SensorTemp()
+                sensor_temp_msg.label = key
+                sensor_temp_msg.current = value[0].current if value[0].current is not None else 0
+                sensor_temp_msg.high = value[0].high if value[0].high is not None else 0
+                sensor_temp_msg.critical = value[0].critical if value[0].critical is not None else 0
+                temps_msg.temps.append(sensor_temp_msg)
 		
             temps_pub.publish(temps_msg)
             
@@ -124,4 +124,4 @@ if __name__ == '__main__':
             network_pub.publish(network_msg)
         
         rate.sleep()
-	is_first = False
+        is_first = False
