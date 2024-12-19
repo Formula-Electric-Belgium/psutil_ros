@@ -45,7 +45,9 @@ from psutil_ros.msg import SensorTemp
 
 if __name__ == '__main__':
     
-    rospy.init_node('psutil_ros_node', anonymous=True)
+    rclpy.init()
+    
+    node = rclpy.create_node('psutil_ros_node', anonymous=True)
 
     # parameters
     loop_rate = rospy.get_param('~loop_rate', 1)
@@ -55,10 +57,10 @@ if __name__ == '__main__':
     publish_network = rospy.get_param('~publish_network', True)
     
     # publishers 
-    cpu_pub = rospy.Publisher('psutil_ros/cpu', Cpu, queue_size=10)
-    mem_pub = rospy.Publisher('psutil_ros/virtual_memory', VirtualMemory, queue_size=10)
-    temps_pub = rospy.Publisher('psutil_ros/temps', Temperatures, queue_size=10)
-    network_pub = rospy.Publisher('psutil_ros/network', Network, queue_size=10)
+    cpu_pub = node.create_publisher(Cpu, queue_size=10, 'psutil_ros/cpu')
+    mem_pub = node.create_publisher(VirtualMemory, queue_size=10, 'psutil_ros/virtual_memory')
+    temps_pub = node.create_publisher(Temperatures, queue_size=10, 'psutil_ros/temps')
+    network_pub = node.create_publisher(Network, queue_size=10, 'psutil_ros/network')
     
     rate = rospy.Rate(loop_rate)
     is_first = True

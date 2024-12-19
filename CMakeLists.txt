@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(psutil_ros)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -7,14 +7,14 @@ project(psutil_ros)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  rospy
-  message_generation
-)
+
+find_package(rosidl_default_generators REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(rclpy REQUIRED)
+set(CMAKE_CXX_STANDARD 1 4)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -46,14 +46,17 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
-   Cpu.msg
-   VirtualMemory.msg
-   Temperatures.msg
-   SensorTemp.msg
-   Network.msg
- )
+ 
+rosidl_generate_interfaces(
+    ${PROJECT_NAME}
+        msg/VirtualMemory.msg
+        msg/Temperatures.msg
+        msg/SensorTemp.msg
+        msg/Network.msg
+        msg/Cpu.msg
+    DEPENDENCIES
+        
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -70,10 +73,7 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
- )
+ 
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -104,12 +104,6 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES psutil-ros
-  CATKIN_DEPENDS rospy
-#  DEPENDS system_lib
-)
 
 ###########
 ## Build ##
@@ -119,7 +113,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  ${catkin_INCLUDE_DIRS}
+  
 )
 
 ## Declare a C++ library
@@ -199,3 +193,5 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+ament_export_dependencies(rclpy)
+ament_package()
