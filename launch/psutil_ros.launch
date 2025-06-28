@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="psutil_ros" name="psutil_ros_node" exec="psutil_ros_node.py" output="screen"/>
+</launch>

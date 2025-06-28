@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(psutil_ros)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 
 # find_package(ament_python REQUIRED)
@@ -25,6 +29,10 @@ ament_export_dependencies(rosidl_default_runtime)
 install(PROGRAMS
   scripts/psutil_ros_node.py  # Install the node script from psutil_ros folder
   DESTINATION lib/${PROJECT_NAME}  # Destination directory
+)
+
+install( DIRECTORY launch
+	DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
