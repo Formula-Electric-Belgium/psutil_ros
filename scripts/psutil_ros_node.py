@@ -128,11 +128,11 @@ def main(args=None):
     rclpy.init(args=args)
 
     psutil_ros_node = PsutilRosNode()
-
-    rclpy.spin(psutil_ros_node)
-
-    psutil_ros_node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(psutil_ros_node)
+    finally:
+        psutil_ros_node.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == "__main__":
